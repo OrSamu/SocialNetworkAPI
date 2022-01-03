@@ -1,0 +1,25 @@
+{
+  "name": "social-network-api",
+  "version": "1.0.0",
+  "description": "Social network basic api - for javascript course",
+  "main": "server.js",
+  "scripts": {
+    "server":"node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OrSamu/SocialNetworkAPI.git"
+  },
+  "author": {
+    "name": "Or Samucian",
+    "email": "orsam@mta.ac.il"
+  },
+  "bugs": {
+    "url": "https://github.com/OrSamu/SocialNetworkAPI/issues"
+  },
+  "homepage": "https://github.com/OrSamu/SocialNetworkAPI#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "http-status-codes": "^2.2.0"
+  }
+}
