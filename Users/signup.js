@@ -1,42 +1,27 @@
+const req = require("express/lib/request");
 const { StatusCodes } = require("http-status-codes");
-//const output_file = require ("");
+const users_database = require("./users_database");
 
 module.exports = async (req, res) => {
     try {
-        const {
-            body,
-          } = req
-      
-          console.log(body);
+          const full_name =  req.body.full_name;
+          const email =   req.body.email ;
+          const password =  req.body.password ;
 
-          const {
-              full_name,
-              email,
-              password
-          } = body
-
-          /*if(is_email_used(email) == true)
+          if(users_database.is_email_used(email) === true)
           {
-              res.status( StatusCodes.BAD_REQUEST );
-              res.send( "Email is already being used");
-              return;
+            res.status( StatusCodes.BAD_REQUEST );
+            res.send( "Email is already being used");
           }
           else {
-              const id = add_new_user(body);
-          }*/
-      
-          //const id=fs.database.get_new_id();
-          console.log(`full name: ${full_name}, email: ${email}, password ssh: ${password}`)
-
-          res.status( StatusCodes.OK );
-          res.send("2");
-          return;
+            const new_user_id = users_database.create_new_user(full_name,email,password);
+            res.status( StatusCodes.OK );
+            res.send(`"ID":"${new_user_id}"`);
+          }
       }
     catch (error) {
         res.status(StatusCodes.BAD_GATEWAY);
         res.send("Error creating the user");
-        const error_log = "Error - can not create user"
-        return;
     }
+    return;
 }
-
