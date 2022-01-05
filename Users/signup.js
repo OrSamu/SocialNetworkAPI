@@ -8,15 +8,24 @@ module.exports = async (req, res) => {
           const email =   req.body.email ;
           const password =  req.body.password ;
 
-          if(users_database.is_email_used(email) === true)
+          if (!full_name || !email || !password)
           {
             res.status( StatusCodes.BAD_REQUEST );
-            res.send( "Email is already being used");
+            res.send( "Data is missing");
           }
           else {
-            const new_user_id = users_database.create_new_user(full_name,email,password);
-            res.status( StatusCodes.OK );
-            res.send(`"ID":"${new_user_id}"`);
+            const used_email =  users_database.users_list.find( user =>  user.email == email )
+
+            if(!used_email)
+            {
+              const new_user_id = users_database.create_new_user(full_name,email,password);
+              res.status( StatusCodes.OK );
+              res.send(`"ID":"${new_user_id}"`);
+            }
+            else {
+              res.status( StatusCodes.BAD_REQUEST );
+              res.send( "Email is already being used");
+            }
           }
       }
     catch (error) {
