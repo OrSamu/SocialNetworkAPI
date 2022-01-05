@@ -4,7 +4,7 @@
   "description": "Social network basic api - for javascript course",
   "main": "server.js",
   "scripts": {
-    "server":"node server.js"
+    "server": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/OrSamu/SocialNetworkAPI#readme",
   "dependencies": {
     "express": "^4.17.2",
-    "http-status-codes": "^2.2.0"
+    "http-status-codes": "^2.2.0",
+    "nodemon": "^2.0.15"
   }
 }

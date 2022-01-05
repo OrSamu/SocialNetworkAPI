@@ -21,7 +21,7 @@ app.use(express.urlencoded( // to support URL-encoded bodies
   extended: true
 }));
 
-// API functions
+// API general functions
 
 // Version 
 function get_version( req, res) 
@@ -33,12 +33,11 @@ function get_version( req, res)
 // Routing
 const router = express.Router();
 
+app.use('/api',router);
+
 router.get('/version', (req, res) => { get_version(req, res )  } )
 router.use('/users',users);
 
-app.use('/api',router);
-
 // Init 
-
 let msg = `${package.description} listening at port ${port}`
 app.listen(port, () => { console.log( msg ) ; })
