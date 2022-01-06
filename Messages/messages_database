@@ -1,0 +1,34 @@
+const { StatusCodes } = require("http-status-codes");
+const users_database = require("../Users/users_database");
+
+
+const messages_list = [];
+
+let messages_counter = 0;
+
+function Message(sender_id,receiver_id, text, date_and_time) {
+  this.sender_id = sender_id;
+  this.receiver_id = receiver_id;
+  this.message_id = ++messages_counter;
+  this.text = text;
+  this.date_and_time = date_and_time;
+}
+
+function create_new_message(sender_id,receiver_id, text, date_and_time) {
+  const new_message = new Message(sender_id,receiver_id, text, date_and_time);
+  messages_list.push(new_message);
+
+  return new_message.message_id;
+}
+
+function get_my_messages(user) {
+    return messages_list.find(message => {
+        return (message.sender_id == user.id || message.receiver_id == 0)
+    });
+}
+
+module.exports = {
+    get_my_messages : get_my_messages,
+    messages_counter:messages_counter,
+    create_new_message:create_new_message,
+};

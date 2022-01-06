@@ -2,7 +2,10 @@
 const express = require('express')
 const StatusCodes = require('http-status-codes').StatusCodes;
 const package = require('./package.json');
-const users=require("./Users");
+const users = require("./Users");
+const posts = require("./Posts");
+const messages = require("./Messages");
+
 
 const app = express()
 let  port = 2718;
@@ -37,6 +40,8 @@ app.use('/api',router);
 
 router.get('/version', (req, res) => { get_version(req, res )  } )
 router.use('/users',users);
+router.use('/posts',posts);
+router.use('/messages',messages);
 
 // Init 
 let msg = `${package.description} listening at port ${port}`
