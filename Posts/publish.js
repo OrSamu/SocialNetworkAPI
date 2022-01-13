@@ -6,21 +6,29 @@ const posts_database = require("./posts_database");
 
 module.exports = async (req, res) => {
   try {
-      const authHead = req.header("Authorization");
-      const [type, token] = authHead.split(" ");
-      const publisher = users_database.get_user_by_token(token);
-      if (publisher) {
-          const { text } = req.body;
-          posts_database.create_new_post(publisher.id,text,Date.now());
-          res.status(StatusCodes.OK);
-      }
-      else {
-          res.status(StatusCodes.UNAUTHORIZED);
-      }
+    const token = req.headers.authorization.split(' ')[1];
+    const { post_text } = req.body;
+    const post_id = await post(token, post_text);
+    if (!post_id) {
+      res.status(StatusCodes.UNAUTHORIZED);
+      return res.send("failed to post");
     }
-   catch (error) {
+    res.status(StatusCodes.OK);
+    return res.send(JSON.stringify({ post_id: post_id }));
+  }
+  catch (error) {
     res.status(StatusCodes.BAD_GATEWAY);
     res.send("Error retrieving users list");
   }
   return;
 };
+
+async function post(token, text) {
+  posting_user = users_database.users_list.find(user => {
+    return user.token === token;
+  });
+  if (!posting_user) {
+    return null;
+  }
+  return posts_database.create_new_post(posting_user.id, text,)
+}

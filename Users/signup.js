@@ -5,31 +5,31 @@ const users_database = require("./users_database");
 module.exports = async (req, res) => {
   try {
     const { full_name, email, password } = req.body;
-
     if (!full_name || !email || !password) {
       res.status(StatusCodes.BAD_REQUEST);
       res.send("Data is missing");
     } else {
-      const used_email = users_database.users_list.find(
-        (user) => user.email == email
-      );
-
-      if (!used_email) {
-        const new_user_id = users_database.create_new_user(
-          full_name,
-          email,
-          password
-        );
-        res.status(StatusCodes.OK);
-        res.send(`"ID":"${new_user_id}"`);
-      } else {
-        res.status(StatusCodes.BAD_REQUEST);
-        res.send("Email is already being used");
+      const id_obj = { id : await signup(full_name, email, password)};
+      if(!id_obj.id) {
+        res.status(StatusCodes.FORBIDDEN);
+        res.send("Email already being used");
+        return;
       }
+      res.status(StatusCodes.OK);
+      res.send(JSON.stringify(id_obj));
     }
   } catch (error) {
     res.status(StatusCodes.BAD_GATEWAY);
-    res.send("Error creating the user");
+    res.send(`Error signing up - ${error}`);
   }
-  return;
 };
+
+async function signup(full_name,email,password) {
+  const used_email = users_database.users_list.find(user => {
+    return user.email === email && user.password === hash_password;
+  });
+  if(used_email) {
+    return null;
+  }
+  return users_database.create_new_user(full_name, email, password);
+}

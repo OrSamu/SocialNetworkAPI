@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const router = express.Router();
 
 //const fs = require("fs").promises;
@@ -9,4 +9,4 @@ router.post('/send_message', send_message);
 const get_message = require('./get_message');
 router.post('/get_message', get_message);
 
-module.exports = router;
+module.exports = router;*/

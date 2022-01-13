@@ -1,4 +1,4 @@
-const req = require("express/lib/request");
+/*const req = require("express/lib/request");
 const { StatusCodes } = require("http-status-codes");
 const users_database = require("../Users/users_database");
 const messages_database = require("./messages_database");
@@ -26,4 +26,4 @@ module.exports = async (req, res) => {
     res.send("Error retrieving users list");
   }
   return;
-};
+};*/

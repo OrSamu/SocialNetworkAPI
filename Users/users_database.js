@@ -1,4 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
+const token_lib = require("./token");
 
 const UserStatus = {
   ADMIN: 0,
@@ -11,8 +12,6 @@ const UserStatus = {
 
 Object.freeze(UserStatus);
 
-const milliseconds_in_quarter_hour = 900000;
-
 const users_list = [
   {
     id: 1,
@@ -20,18 +19,15 @@ const users_list = [
     email: "admin",
     password: hash_function("admin"),
     user_status: UserStatus.ADMIN,
-    token: undefined,
-    token_time_stamp: undefined,
+    token: null,
+    token_time_stamp: null,
   },
 ];
 
-let users_counter = 2;
-
-const characters =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+let users_counter = 1;
 
 function User(full_name, email, password) {
-  this.id = get_new_id();
+  this.id = ++users_counter;                            // first increasing the counter then assign the value
   this.full_name = full_name;
   this.email = email;
   this.password = hash_function(password);
@@ -41,27 +37,31 @@ function User(full_name, email, password) {
 }
 
 User.prototype.change_user_status = function (new_status) {
+  if (this.id === 1) {
+    throw new Error("can not change status for root user");
+  }
+  if (this.user_status === UserStatus.DELETED) {
+    throw new Error("this user has been deleted")
+  }
+  if (new_status === UserStatus.ADMIN || new_status === UserStatus.CREATED) {
+    throw new Error("can not change to this status")
+  }
   this.user_status = new_status;
 };
-
-function generateString(length) {
-  let result = "";
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
-
-function get_new_id() {
-  const id_to_return = users_counter;
-  users_counter++;
-  return id_to_return;
-}
 
 function hash_function(password) {
   return "new" + password + "pass";
 }
+
+function create_token(user) {
+  user.token = token_lib.create_new_token();
+  user.token_time_stamp = Date.now();
+  return user.token;
+}
+
+function has_valid_token(user) {
+  return token_lib.is_token_valid(user.token_time_stamp);
+};
 
 function create_new_user(full_name, email, password) {
   const new_user = new User(full_name, email, password);
@@ -71,7 +71,7 @@ function create_new_user(full_name, email, password) {
 }
 
 //function will return user status so the system will know what type of user tried to access
-function check_user_by_token(token_to_check) {
+/*function check_user_by_token(token_to_check) {
   const user_being_checked = users_list.find((user) => {
     return user.token === token_to_check && is_token_valid(user);
   });
@@ -81,39 +81,7 @@ function check_user_by_token(token_to_check) {
   return UserStatus.DELETED;
 }
 
-function get_user_by_token(token_to_check) {
-    const user_being_checked = users_list.find((user) => {
-      return user.token === token_to_check && is_token_valid(user);
-    });
-    if (user_being_checked) {
-      return user_being_checked;
-    }
-    return null;
-  }
 
-function authentication(email, password) {
-  const hash_password = hash_function(password);
-  const is_user_exist = users_list.find((user) => {
-    return user.email === email && user.password === hash_password;
-  });
-  if (is_user_exist) {
-    if (is_user_exist.user_status < UserStatus.CREATED) {
-      create_token(is_user_exist);
-      return is_user_exist.token;
-    } else {
-      return -1;
-    }
-  } else {
-    return null;
-  }
-}
-
-function create_token(logging_in_user) {
-  if (!is_token_valid(logging_in_user)) {
-    logging_in_user.token = generateString(10);
-    logging_in_user.token_time_stamp = Date.now();
-  }
-}
 
 function is_token_valid(logging_in_user) {
   const current_time = Date.now();
@@ -156,15 +124,13 @@ function change_user_status_by_id(user_id, new_status) {
         return true;
     }
     return false;
-}
-
+}*/
 
 module.exports = {
   UserStatus: UserStatus,
   users_list: users_list,
+  hash_function : hash_function,
   create_new_user: create_new_user,
-  authentication: authentication,
-  check_user_by_token: check_user_by_token,
-  get_user_by_token:get_user_by_token,
-  change_user_status_by_id: change_user_status_by_id,
+  create_token: create_token,
+  has_valid_token: has_valid_token,
 };

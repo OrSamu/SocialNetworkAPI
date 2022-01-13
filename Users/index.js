@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
+const users_database = require('./users_database')
 
 //const fs = require("fs").promises;
 
@@ -10,12 +12,12 @@ const login = require('./login');
 router.post('/login', login);
 
 const logout = require('./logout');
-router.post('/logout', logout);
+router.post('/logout',auth.auth_by_role(users_database.UserStatus.REACTIVATED),logout);
 
 const list_users = require('./list_users');
-router.get('/list_users', list_users);
+router.get('/list_users', auth.auth_by_role(users_database.UserStatus.ADMIN), list_users);
 
-const change_user_status = require('./change_user_status');
-router.post('/change_user_status', change_user_status);
+const change_status = require('./change_status');
+router.post('/change_status', auth.auth_by_role(users_database.UserStatus.ADMIN), change_status);
 
 module.exports = router;

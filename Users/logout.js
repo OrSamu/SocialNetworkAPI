@@ -4,19 +4,29 @@ const users_database = require("./users_database");
 
 module.exports = async (req, res) => {
   try {
-    const authHead = req.header("Authorization");
-    const [type, token] = authHead.split(" ");
-    if (users_database.check_user_by_token(token) < UserStatus.CREATED ) {
-    log_user_out_by_token(token);
-    res.status(StatusCodes.OK);
+    const token = req.headers.authorization.split(' ')[1];
+    const result = await logout(token);
+    if(result) {
+      res.status(StatusCodes.OK);
+      return res.send("");  
     }
-    else {
-        res.StatusCodes(StatusCodes.UNAUTHORIZED)
-    }
-}
+      res.status(StatusCodes.FORBIDDEN);
+      return res.send("user wasn't logged in");
+  }
    catch (error) {
     res.status(StatusCodes.BAD_GATEWAY);
     res.send("Error logging in - " + error);
   }
-  return;
 };
+
+async function logout(token) {
+  user_to_logout = users_database.users_list.find (user => {
+    return user.token === token;
+  });
+  if(user_to_logout) {
+    user_to_logout.token = null;
+    user_to_logout.token_time_stamp = null;
+    return true;
+  }
+  return false;
+}

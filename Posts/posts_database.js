@@ -21,7 +21,7 @@ function create_new_post(owner_id, text, date_and_time) {
   const new_post = new Post(owner_id, text, date_and_time);
   posts_list.push(new_post);
 
-  return new_user.id;
+  return new_post.post_id;
 }
 
 function get_post(post_id) {
