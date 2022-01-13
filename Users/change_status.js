@@ -25,9 +25,9 @@ module.exports = async (req, res) => {
   }
 };
 
-async function change_status(user_id, new_status) {
+async function change_status(user_id_to_change, new_status) {
   const user = users_database.users_list.find(user => {
-    return (user.id == user_id);
+    return (user.id == user_id_to_change);
   });
   if (user) {
     user.change_user_status(new_status);

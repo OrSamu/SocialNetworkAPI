@@ -70,62 +70,6 @@ function create_new_user(full_name, email, password) {
   return new_user.id;
 }
 
-//function will return user status so the system will know what type of user tried to access
-/*function check_user_by_token(token_to_check) {
-  const user_being_checked = users_list.find((user) => {
-    return user.token === token_to_check && is_token_valid(user);
-  });
-  if (user_being_checked) {
-    return user_being_checked.user_status;
-  }
-  return UserStatus.DELETED;
-}
-
-
-
-function is_token_valid(logging_in_user) {
-  const current_time = Date.now();
-  if (logging_in_user.token === null) {
-    return false;
-  } else {
-    return (
-      current_time - logging_in_user.token_time_stamp <
-      milliseconds_in_quarter_hour
-    );
-  }
-}
-
-function log_user_out_by_token(user_token) {
-  const is_user_exist = users_list.find((user) => {
-    return user.token === user_token;
-  });
-  if (is_user_exist) {
-    is_user_exist.token = null;
-    is_user_exist.token_time_stamp = null;
-    return 1;
-  }
-  return -1;
-}
-
-function is_valid_status(status_to_check) {
-    return status_to_check > UserStatus.ADMIN && status_to_check <= UserStatus.DELETED;
-}
-
-function change_user_status_by_id(user_id, new_status) {
-    const is_user_exist = users_list.find(user => {
-        return user.id == user_id;
-    })
-    const should_change_status = (is_user_exist &&
-        (is_user_exist.user_status != UserStatus.DELETED) &&
-        (is_user_exist.user_status != new_status) &&
-        is_valid_status(new_status));
-    if (should_change_status) {
-        is_user_exist.user_status = parseInt(new_status);
-        return true;
-    }
-    return false;
-}*/
-
 module.exports = {
   UserStatus: UserStatus,
   users_list: users_list,

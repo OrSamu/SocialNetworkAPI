@@ -43,5 +43,4 @@ async function login(email, password) {
     res.status(StatusCodes.BAD_GATEWAY);
     res.send("Error logging in - " + error);
   }
-  return;
 }
