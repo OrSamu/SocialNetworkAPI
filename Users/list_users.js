@@ -1,11 +1,13 @@
 const req = require("express/lib/request");
 const { StatusCodes } = require("http-status-codes");
-const users_database = require("./users_database");
+const { readDb } = require('../database');
 
 module.exports = async (req, res) => {
   try {
+    const users = await readDb('users');
+
     res.status(StatusCodes.OK);
-    res.send(JSON.stringify(users_database.users_list));
+    res.send(users.map(({ password, token, token_time_stamp, ...rest }) => rest));
   } 
   catch (error) {
     res.status(StatusCodes.BAD_GATEWAY);

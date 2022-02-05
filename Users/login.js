@@ -1,11 +1,14 @@
 const req = require("express/lib/request");
 const res = require("express/lib/response");
 const { StatusCodes } = require("http-status-codes");
+const read = require("../Posts/read");
+const { readDb, updateDb } = require('./../database');
 const users_database = require("./users_database");
 
 module.exports = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     if (!email || !password) {
       res.status(StatusCodes.BAD_REQUEST);
       res.send("Data is missing");
@@ -30,13 +33,18 @@ module.exports = async (req, res) => {
 async function login(email, password) {
   try {
     const hash_password = users_database.hash_function(password);
-    const user = users_database.users_list.find(user => {
+
+    const users = await readDb('users');
+    const user = users.find(user => {
       return user.email === email && user.password === hash_password;
     });
+    
     if (!user || user.user_status > users_database.UserStatus.REACTIVATED) {
       return null;
     }
     users_database.create_token(user);
+    updateDb('users', user);
+    
     return user.token;
   }
   catch (error) {

@@ -1,35 +1,41 @@
 const req = require("express/lib/request");
 const { StatusCodes } = require("http-status-codes");
-const users_database = require("../Users/users_database");
+const { has_valid_token } = require('../Users/users_database');
+const { readDb } = require('../database');
 
-function auth_by_role(role) {
-    return async (req, res, next) => {
-        try {
-            const token = req.headers.authorization.split(' ')[1];
-            const result = await authenticator_helper(token, role);
-            if (!result) {
-                console.log("positive negative");
-                res.status(StatusCodes.UNAUTHORIZED);
-                return res.send("Access denied");
-            }
-            next();
-        } catch (error) {
+const authenticate = async (req, res, next) => {
+    try {
+        const token = (req.headers.authorization || '').split(' ')[1];
+
+        const user = (await readDb('users')).find(user => {
+            return (user.token == token && has_valid_token(user));
+          });
+
+        if (!user) {
             res.status(StatusCodes.UNAUTHORIZED);
-            res.send(`Error - Authenticating Process Failed - ${error}`);
+            return res.send("Access denied");
         }
+
+        req.user = user;
+
+        next();
+    } catch (error) {
+        res.status(StatusCodes.UNAUTHORIZED);
+        res.send(`Error - Authenticating Process Failed - ${error}`);
     }
 }
 
-async function authenticator_helper(token, role) {
-    const requestor = users_database.users_list.find(user => {
-        return (user.token == token && users_database.has_valid_token(user));
-      });
-    if (!requestor || requestor.user_status > role) {
-        return false;
+const authorize = (role) => (req, res, next) => {
+    if (role > req.user.user_status) {
+        return res
+            .status(StatusCodes.FORBIDDEN)
+            .send();
     }
-    return true;
+
+    next();
 }
 
 module.exports = {
-    auth_by_role
+    authenticate,
+    authorize
 }

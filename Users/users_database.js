@@ -1,6 +1,9 @@
 const { StatusCodes } = require("http-status-codes");
 const token_lib = require("./token");
 
+const salt = 'CfoTSXTgAi+CBKd8Ilu1O7taZ5noBHa/0Z8TGI8TJwVJ7s/NDxYvULqceqoWgqeIzdebePoFT0zDJlyX4IJ46swi3hcOuFv9BjBcdMAKbSwuz+9bEf1iH43ApmvDbwBmx8PCVKdMJtbzetq4IY/zIXPHUx/MmDizDftpLiCA7MA=';
+const crypto = require('crypto');
+
 const UserStatus = {
   ADMIN: 0,
   APPROVED: 1,
@@ -11,20 +14,6 @@ const UserStatus = {
 };
 
 Object.freeze(UserStatus);
-
-const users_list = [
-  {
-    id: 1,
-    full_name: "Root",
-    email: "admin",
-    password: hash_function("admin"),
-    user_status: UserStatus.ADMIN,
-    token: null,
-    token_time_stamp: null,
-  },
-];
-
-let users_counter = 1;
 
 function User(full_name, email, password) {
   this.id = ++users_counter;                            // first increasing the counter then assign the value
@@ -50,7 +39,8 @@ User.prototype.change_user_status = function (new_status) {
 };
 
 function hash_function(password) {
-  return "new" + password + "pass";
+  const hmac = crypto.createHmac('sha256', salt);
+  return hmac.update(password).digest('hex');
 }
 
 function create_token(user) {
@@ -72,7 +62,6 @@ function create_new_user(full_name, email, password) {
 
 module.exports = {
   UserStatus: UserStatus,
-  users_list: users_list,
   hash_function : hash_function,
   create_new_user: create_new_user,
   create_token: create_token,

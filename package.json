@@ -4,7 +4,9 @@
   "description": "Social network basic api - for javascript course",
   "main": "server.js",
   "scripts": {
-    "server": "nodemon server.js"
+    "prestart": "node init.js",
+    "start": "node server.js",
+    "server": "CHOKIDAR_USEPOLLING=true nodemon --ext js --watch . -x 'node --inspect=0.0.0.0:9229 server.js'"
   },
   "repository": {
     "type": "git",

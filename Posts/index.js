@@ -1,15 +1,35 @@
 const express = require('express');
 const router = express.Router();
 
-//const fs = require("fs").promises;
+const create = require('./create');
+const read = require('./read');
+const destroy = require('./destroy');
+const update = require('./update');
+const list = require('./list');
 
-const publish = require('./publish');
-router.post('/publish', publish);
+/**
+ * List
+ */
+router.get('/', list)
 
-const delete_post = require('./delete');
-router.post('/delete', delete_post);
+/**
+ * Show
+ */
+router.get('/:id', read);
 
-const list_posts = require('./list_posts');
-router.get('/list_posts', list_posts);
+/**
+ * Create
+ */
+router.post('/', create)
+
+/**
+ * UPDATE
+ */
+router.put('/:id',  update)
+
+/**
+ * Delete
+ */
+router.delete('/:id', destroy);
 
 module.exports = router;

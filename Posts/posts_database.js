@@ -1,27 +1,39 @@
 const { StatusCodes } = require("http-status-codes");
+const { readDb, writeDb } = require('../database');
 
 const posts_list = [];
-
-let posts_counter = 0;
 
 const PostStatus = {
     POSTED: 0,
     DELETED: 1,
   };
 
-function Post(owner_id, text, date_and_time) {
-  this.owner_id = owner_id;
-  this.post_id = ++posts_counter;
-  this.text = text;
-  this.date_and_time = date_and_time;
-  this.status = PostStatus.POSTED;
+class Post {
+  constructor (owner_id, text) {
+    this.owner_id = owner_id;
+    this.text = text;
+    this.date_and_time = new Date();
+    this.status = PostStatus.POSTED;
+  }
+
+  toJSON() {
+    return {
+      ownser_id: this.owner_id,
+      text: this.text,
+      date_and_time: this.date_and_time,
+      status: PostStatus.POSTED,
+    }
+  }
 }
 
-function create_new_post(owner_id, text, date_and_time) {
-  const new_post = new Post(owner_id, text, date_and_time);
-  posts_list.push(new_post);
+async function create_new_post(owner_id, text) {
+  const new_post = new Post(owner_id, text);
+  
+  // valiate data
 
-  return new_post.post_id;
+  const post = await writeDb('posts', new_post.toJSON());
+
+  return post;
 }
 
 function get_post(post_id) {
@@ -41,7 +53,6 @@ function delete_post(user_id,post_id) {
 
 module.exports = {
   posts_list : posts_list,
-  posts_counter:posts_counter,
   create_new_post:create_new_post,
   delete_post:delete_post
 };
