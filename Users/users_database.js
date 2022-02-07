@@ -16,7 +16,6 @@ const UserStatus = {
 Object.freeze(UserStatus);
 
 function User(full_name, email, password) {
-  this.id = ++users_counter;                            // first increasing the counter then assign the value
   this.full_name = full_name;
   this.email = email;
   this.password = hash_function(password);
@@ -25,7 +24,7 @@ function User(full_name, email, password) {
   this.token_time_stamp = null;
 }
 
-User.prototype.change_user_status = function (new_status) {
+/*User.prototype.change_user_status = function (new_status) {
   if (this.id === 1) {
     throw new Error("can not change status for root user");
   }
@@ -36,7 +35,18 @@ User.prototype.change_user_status = function (new_status) {
     throw new Error("can not change to this status")
   }
   this.user_status = new_status;
+};*/
+
+User.prototype.is_status_changeable = function () {
+  console.log("is status changeable?")
+  if (this.id === 1 || 
+    this.user_status === UserStatus.DELETED) {
+    return false;
+  }
+  return true;
 };
+
+
 
 function hash_function(password) {
   const hmac = crypto.createHmac('sha256', salt);
@@ -55,9 +65,8 @@ function has_valid_token(user) {
 
 function create_new_user(full_name, email, password) {
   const new_user = new User(full_name, email, password);
-  users_list.push(new_user);
 
-  return new_user.id;
+  return new_user;
 }
 
 module.exports = {

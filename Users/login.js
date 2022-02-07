@@ -33,7 +33,6 @@ module.exports = async (req, res) => {
 async function login(email, password) {
   try {
     const hash_password = users_database.hash_function(password);
-
     const users = await readDb('users');
     const user = users.find(user => {
       return user.email === email && user.password === hash_password;

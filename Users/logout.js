@@ -1,11 +1,13 @@
 const req = require("express/lib/request");
 const { StatusCodes } = require("http-status-codes");
+const { readDb , updateDb } = require("../database");
 const users_database = require("./users_database");
 
 module.exports = async (req, res) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
     const result = await logout(token);
+
     if(result) {
       res.status(StatusCodes.OK);
       return res.send("");  
@@ -20,13 +22,21 @@ module.exports = async (req, res) => {
 };
 
 async function logout(token) {
-  user_to_logout = users_database.users_list.find (user => {
+  const users = await readDb('users');
+  const logout_user = users.find (user => {
     return user.token === token;
   });
-  if(user_to_logout) {
-    user_to_logout.token = null;
-    user_to_logout.token_time_stamp = null;
+  console.log("logout user:");
+  console.log(logout_user);
+  if(logout_user) {
+    logout_user.token = null;
+    logout_user.token_time_stamp = null;
+    console.log("new user");
+    console.log(logout_user);
+    updateDb('users',logout_user);
+
     return true;
   }
+
   return false;
 }

@@ -1,23 +1,21 @@
 const req = require("express/lib/request");
 const { StatusCodes } = require("http-status-codes");
-const users_database = require("../Users/users_database");
+const users_database = require("../users/users_database");
 const posts_database = require("./posts_database");
 
 
 module.exports = async (req, res) => {
   try {
-    const authHead = req.header("Authorization");
-    const [type, token] = authHead.split(" ");
-    const reader = users_database.get_user_by_token(token);
-    if (reader) {
-      res.send(JSON.stringify(posts_database.posts_list));
-      res.status(StatusCodes.OK);
-    } else {
-      res.status(StatusCodes.UNAUTHORIZED);
-    }
-  } catch (error) {
+    res.status(StatusCodes.OK);
+    return res.send(JSON.stringify(await list_posts()));
+  } 
+  catch (error) {
     res.status(StatusCodes.BAD_GATEWAY);
-    res.send("Error retrieving posts list");
+    res.send("Error retrieving users list");
   }
-  return;
 };
+
+async function list_posts() {
+  const listing_posts = posts_database.filter_posts((post) => {post.status === posts_database.PostStatus.POSTED});
+  return listing_posts;
+}

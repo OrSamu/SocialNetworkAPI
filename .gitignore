@@ -2,3 +2,4 @@ readme.txt
 old
 node_modules
 database.json
+.vscode*

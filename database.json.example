@@ -1,12 +1,13 @@
 {
-	"posts": [],
 	"users": [{
 		"id": 1,
 		"full_name": "Root",
 		"email": "admin@fake.com",
 		"password": "4b08e8198c477b229d554dd2e64802a34db394fcda1c4dbbcaa7f847c8ce5056",
 		"user_status": 0,
-		"token": "rw8@FiLzAU",
-		"token_time_stamp": 1644064719468
-	}]
+		"token": null,
+		"token_time_stamp": null
+	}],
+	"posts": [],
+	"messages": []
 }

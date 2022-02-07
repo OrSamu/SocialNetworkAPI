@@ -10,10 +10,9 @@ const { UserStatus } = require('./users_database');
 
 //const fs = require("fs").promises;
 
-
 router.post('/signup', signup);
-router.post('/login', login);
-router.post('/logout', authenticate, logout);
+router.put('/login', login);
+router.put('/logout', authenticate, logout);
 router.get('/list_users',
      [
          authenticate,
@@ -21,7 +20,7 @@ router.get('/list_users',
      ],
      list_users
 );
-router.post('/change_status',
+router.put('/change_status',
      [
          authenticate,
          authorize(UserStatus.ADMIN)

@@ -4,7 +4,6 @@ const StatusCodes = require('http-status-codes').StatusCodes;
 const package = require('./package.json');
 const users = require("./Users");
 const posts = require("./Posts");
-const { authenticate } = require('./middleware/auth');
 //const messages = require("./Messages");
 const app = express();
 
@@ -39,10 +38,10 @@ const router = express.Router();
 app.use('/api',router);
 
 router.get('/version', /*auth,*/(req, res) => { get_version(req, res )  } )
-router.use('/users', users);
-router.use('/posts', authenticate, posts);
+router.use('/users',users);
+router.use('/posts',posts);
 //router.use('/messages',messages);
 
 // Init 
 let msg = `${package.description} listening at port ${port}`
-app.listen(port, () => { console.log( msg ) ; });
+app.listen(port, () => { console.log( msg ) ; })
