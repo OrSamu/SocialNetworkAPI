@@ -6,7 +6,7 @@
   "scripts": {
     "prestart": "node init.js",
     "start": "node server.js",
-    "server": "nodemon --ext js --watch . -x node --inspect=0.0.0.1:9229 server.js'"
+    "server": "nodemon -e js --inspect ./server.js 2718"
   },
   "repository": {
     "type": "git",
