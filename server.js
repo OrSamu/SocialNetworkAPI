@@ -1,21 +1,38 @@
 // External modules
 const express = require('express')
-const StatusCodes = require('http-status-codes').StatusCodes;
-const package = require('./package.json');
-const users = require("./Users");
-const posts = require("./Posts");
-//const messages = require("./Messages");
 const app = express();
-
+const package = require('./package.json');
+const path = require('path');
+const users = require("./users");
+const posts = require("./posts");
+//const messages = require("./Messages");
+const reExt = /\.([a-z]+)/i;
 let  port = 2718;
 
 // General app settings
+function content_type_from_extension(url) {
+	const m = url.match(reExt);
+	if(!m) return 'application/son'
+	const ext = m[1].toLowerCase();
+
+	switch (ext)
+	{
+		case 'js': return 'text/javascript';
+		case 'css': return 'text/css';
+		case 'html': return 'text/html';
+	}
+
+	return 'text/plain';
+}
+
 const set_content_type = function (req, res, next) 
 {
-	res.setHeader("Content-Type", "application/json; charset=utf-8");
+	const content_type = req.baseUrl == '/api' ? "application/json; charset=utf-8":content_type_from_extension(req.url);
+	res.setHeader("Content-Type", content_type);
 	next()
 }
 
+app.use(express.static(path.join(__dirname,'site')));
 app.use( set_content_type );
 app.use(express.json());  // to support JSON-encoded bodies
 app.use(express.urlencoded( // to support URL-encoded bodies
@@ -36,7 +53,7 @@ function get_version( req, res)
 const router = express.Router();
 
 app.use('/api',router);
-
+//app.get("/", (req, res) => { res.send("Hello Geeks"); });
 router.get('/version', /*auth,*/(req, res) => { get_version(req, res )  } )
 router.use('/users',users);
 router.use('/posts',posts);

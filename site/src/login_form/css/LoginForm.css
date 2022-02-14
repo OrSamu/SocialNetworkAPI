@@ -1,0 +1,23 @@
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right:auto;
+  width: 12%;
+}
+
+.LoginForm {
+  display: block;
+  margin-left: auto;
+  margin-right:auto;
+  width: 180px;
+  height:auto;
+}
+
+.LoginFields {
+  margin-bottom: 0.5rem;
+}
+
+#login_button {
+  width:177px;
+}
+

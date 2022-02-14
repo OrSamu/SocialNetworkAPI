@@ -3,3 +3,4 @@ old
 node_modules
 database.json
 .vscode*
+*lib/*

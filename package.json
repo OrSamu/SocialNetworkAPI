@@ -4,6 +4,7 @@
   "description": "Social network basic api - for javascript course",
   "main": "server.js",
   "scripts": {
+    "build": "npx babel site --out-dir site/lib",
     "prestart": "node init.js",
     "start": "node server.js",
     "server": "nodemon -e js --inspect ./server.js 2718"
@@ -24,5 +25,11 @@
     "express": "^4.17.2",
     "http-status-codes": "^2.2.0",
     "nodemon": "^2.0.15"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.0",
+    "@babel/core": "^7.17.2",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7"
   }
 }

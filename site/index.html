@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>MyCast</title>
+	<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+	<script src="lib/src/login_form/js/LoginForm.js"></script>
+	<link rel="stylesheet" type='text/css' href="src/login_form/css/LoginForm.css">
+</head>
+
+<body>
+
+	<img src="resources/logo.png" class="logo">
+	<div id='root'></id>
+
+</body>
+
+<script>
+
+const domContainer = document.querySelector('#root');
+ReactDOM.render( React.createElement(LoginForm) , domContainer);
+//ReactDOM.render( React.createElement(RegisterButton) , domContainer);
+
+</script>
+
+
+</html>
