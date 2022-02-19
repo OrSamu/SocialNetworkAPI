@@ -106,6 +106,16 @@ class LoginForm extends React.Component {
         >
           Login
         </button>
+        <button
+          type="button"
+          name="registerButton"
+          onClick={ () => {
+            window.location.href = "http://localhost:2718/src/register/index.html";
+          }}
+          className="LoginFields"
+        >
+          Register
+        </button>
       </div>
     );
   }
