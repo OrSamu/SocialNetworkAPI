@@ -33,6 +33,7 @@ const set_content_type = function (req, res, next)
 }
 
 app.use(express.static(path.join(__dirname,'site')));
+app.use(express.static(path.join(__dirname,'site/register')));
 app.use( set_content_type );
 app.use(express.json());  // to support JSON-encoded bodies
 app.use(express.urlencoded( // to support URL-encoded bodies

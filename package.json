@@ -4,10 +4,11 @@
   "description": "Social network basic api - for javascript course",
   "main": "server.js",
   "scripts": {
-    "build": "npx babel site --out-dir site/lib",
+    "build": "npx babel site/src --watch --out-dir site/lib",
     "prestart": "node init.js",
     "start": "node server.js",
-    "server": "nodemon -e js --inspect ./server.js 2718"
+    "server": "nodemon -e js --inspect ./server.js 2718",
+    "refresh": "npm start && npm run build"
   },
   "repository": {
     "type": "git",

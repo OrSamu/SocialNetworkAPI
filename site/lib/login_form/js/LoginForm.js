@@ -6,18 +6,17 @@ class LoginForm extends React.Component {
     super(props);
     this.state = {
       email: "",
-      password: "",
+      password: ""
     };
     this.handle_input_change = this.handle_input_change.bind(this);
     this.handle_login = this.handle_login.bind(this);
-
   }
 
   handle_input_change(event) {
     event.preventDefault();
     const target = event.target;
     this.setState({
-      [target.name]: target.value,
+      [target.name]: target.value
     });
   }
 
@@ -29,11 +28,10 @@ class LoginForm extends React.Component {
     const cookie = response.token;
     this.set_cookie(cookie);
     this.redirect_to_home();
-
   }
 
   redirect_to_home() {
-    window.location.href = "http://localhost:2718/register/index.html"
+    window.location.href = "http://localhost:2718/register/index.html";
   }
 
   async set_cookie(login_cookie) {
@@ -49,17 +47,21 @@ class LoginForm extends React.Component {
     return await fetch(api_address, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         email: email,
-        password: password,
-      }),
+        password: password
+      })
     });
   }
 
   async handle_login() {
-    const { email, password } = this.state;
+    const {
+      email,
+      password
+    } = this.state;
+
     if (!email || !password) {
       alert("Error - email or password missing");
     } else {
@@ -69,9 +71,11 @@ class LoginForm extends React.Component {
         case 401:
           this.wrong_credentials();
           break;
+
         case 200:
           this.login_successful(await response.json());
           break;
+
         case 502:
           this.failed_connection();
           break;
@@ -80,33 +84,28 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    return (
-      <div className="LoginForm">
-        <input
-          name="email"
-          type="text"
-          placeholder = "email"
-          value={this.state.email}
-          onChange={this.handle_input_change}
-          className="LoginFields"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="password"
-          value={this.state.password}
-          onChange={this.handle_input_change}
-          className="LoginFields"
-        />
-        <button
-          type="button"
-          name="loginButton"
-          onClick={this.handle_login}
-          className="LoginFields"
-        >
-          Login
-        </button>
-      </div>
-    );
+    return /*#__PURE__*/React.createElement("div", {
+      className: "LoginForm"
+    }, /*#__PURE__*/React.createElement("input", {
+      name: "email",
+      type: "text",
+      placeholder: "email",
+      value: this.state.email,
+      onChange: this.handle_input_change,
+      className: "LoginFields"
+    }), /*#__PURE__*/React.createElement("input", {
+      name: "password",
+      type: "password",
+      placeholder: "password",
+      value: this.state.password,
+      onChange: this.handle_input_change,
+      className: "LoginFields"
+    }), /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      name: "loginButton",
+      onClick: this.handle_login,
+      className: "LoginFields"
+    }, "Login"));
   }
+
 }
